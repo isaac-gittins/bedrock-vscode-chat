@@ -5,6 +5,21 @@ All notable changes to the AWS Bedrock VSCode Chat extension will be documented 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.1] - 2026-02-05
+
+### Added
+- Comprehensive Makefile with development, build, and publishing targets
+  - Development targets: `install`, `compile`, `watch`, `lint`, `dev`
+  - Build targets: `package`, `publish`, `check`
+  - Cleanup targets: `clean`, `clean-all`
+  - Version management: `version-patch`, `version-minor`, `version-major`
+- ESLint flat config (`eslint.config.js`) for TypeScript linting support
+
+### Changed
+- Reorganized build artifacts into `dist/` directory (cleaner root)
+- Updated `.gitignore` to ignore `dist/` folder instead of individual `*.vsix` files
+- Improved publish workflow with built-in compilation and linting verification
+
 ## [0.3.0] - 2025-12-21
 
 ### Added
