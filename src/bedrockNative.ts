@@ -88,7 +88,7 @@ async function resolveInferenceProfileIdentifierForModel(options: {
 	if (!options.forceRefresh && options.globalState) {
 		const cached = options.globalState.get<CachedInferenceProfile | undefined>(key);
 		if (cached?.identifier) {
-			// Keep cache fairly long-lived; if it stops working we’ll refresh on error.
+			// Keep cache fairly long-lived; if it stops working we'll refresh on error.
 			const ageMs = Date.now() - (cached.cachedAt ?? 0);
 			if (ageMs >= 0 && ageMs < 7 * 24 * 60 * 60 * 1000) {
 				return { identifier: cached.identifier, source: "cache" };
@@ -248,6 +248,17 @@ function mimeToBedrockImageFormat(mime: string): "png" | "jpeg" {
 	return "jpeg";
 }
 
+function hasToolHistory(messages: readonly vscode.LanguageModelChatRequestMessage[]): boolean {
+	for (const msg of messages) {
+		for (const part of msg.content) {
+			if (part instanceof vscode.LanguageModelToolCallPart || part instanceof vscode.LanguageModelToolResultPart) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 function convertVscodeMessagesToBedrock(
 	messages: readonly vscode.LanguageModelChatRequestMessage[],
 	options: { allowToolBlocks: boolean }
@@ -404,7 +415,13 @@ export async function converseOnce(options: {
 	});
 
 	const toolConfig = convertVscodeToolsToBedrockToolConfig(options.tools);
-	const converted = convertVscodeMessagesToBedrock(options.messages, { allowToolBlocks: !!toolConfig });
+	// IMPORTANT: Always preserve tool history (toolUse/toolResult blocks) from message history,
+	// even if the current request doesn't include tools. Bedrock API requires that if a previous
+	// toolUse block exists in the history, its corresponding toolResult block must also be present.
+	// Stripping tool results would cause validation errors like:
+	// "Expected toolResult blocks at messages.43.content for the following Ids: ..."
+	const hasTools = !!toolConfig || hasToolHistory(options.messages);
+	const converted = convertVscodeMessagesToBedrock(options.messages, { allowToolBlocks: hasTools });
 
 	const sendConverse = async (modelId: string) => {
 		return runtime.send(
@@ -420,6 +437,14 @@ export async function converseOnce(options: {
 			})
 		);
 	};
+
+	if (hasTools) {
+		const toolsInRequest = options.tools?.length ?? 0;
+		const historyHasTools = hasToolHistory(options.messages);
+		options.log?.(
+			`converseOnce: Using toolConfig (toolsInRequest=${toolsInRequest}, historyHasTools=${historyHasTools})`
+		);
+	}
 
 	let resp: Awaited<ReturnType<typeof sendConverse>>;
 	try {
