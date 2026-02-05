@@ -212,6 +212,7 @@ export function inferModelCapabilities(modelId: string): ModelCapabilities {
 	const supportsToolCalling =
 		// Known tool-capable families / large models
 		lowerModelId.includes("gpt-oss") ||
+		lowerModelId.includes("claude") ||
 		lowerModelId.includes("mistral") ||
 		lowerModelId.includes("deepseek") ||
 		lowerModelId.includes("qwen") ||
@@ -220,6 +221,8 @@ export function inferModelCapabilities(modelId: string): ModelCapabilities {
 		lowerModelId.includes("glm") ||
 		lowerModelId.includes("kimi") ||
 		lowerModelId.includes("minimax") ||
+		lowerModelId.includes("llama") ||
+		lowerModelId.includes("titan") ||
 		// Strong signal: marketed as an instruct/chat model
 		looksLikeChatModel ||
 		// Assume models over 30B parameters likely support tools
@@ -231,6 +234,58 @@ export function inferModelCapabilities(modelId: string): ModelCapabilities {
 		isCodeSpecialized,
 		isThinking,
 	};
+}
+
+/**
+ * Infer token limits from model ID patterns
+ */
+export function inferTokenLimits(modelId: string): { contextLength: number; maxOutputTokens: number } {
+	const lowerModelId = modelId.toLowerCase();
+
+	// Claude models
+	if (lowerModelId.includes("claude")) {
+		if (lowerModelId.includes("3-5") || lowerModelId.includes("3.5")) {
+			return { contextLength: 200000, maxOutputTokens: 8192 };
+		}
+		if (lowerModelId.includes("claude-3")) {
+			return { contextLength: 200000, maxOutputTokens: 4096 };
+		}
+		return { contextLength: 100000, maxOutputTokens: 4096 };
+	}
+
+	// Mistral/Mixtral models
+	if (lowerModelId.includes("mistral-large") || lowerModelId.includes("mixtral")) {
+		return { contextLength: 200000, maxOutputTokens: 8192 };
+	}
+	if (lowerModelId.includes("mistral")) {
+		return { contextLength: 128000, maxOutputTokens: 4096 };
+	}
+
+	// DeepSeek models
+	if (lowerModelId.includes("deepseek")) {
+		return { contextLength: 200000, maxOutputTokens: 8192 };
+	}
+
+	// Qwen models
+	if (lowerModelId.includes("qwen3-vl") || lowerModelId.includes("qwen3-235b")) {
+		return { contextLength: 180000, maxOutputTokens: 8192 };
+	}
+	if (lowerModelId.includes("qwen")) {
+		return { contextLength: 128000, maxOutputTokens: 4096 };
+	}
+
+	// Llama models
+	if (lowerModelId.includes("llama-3") || lowerModelId.includes("llama3")) {
+		return { contextLength: 128000, maxOutputTokens: 4096 };
+	}
+
+	// Titan models
+	if (lowerModelId.includes("titan")) {
+		return { contextLength: 32000, maxOutputTokens: 4096 };
+	}
+
+	// Conservative defaults
+	return { contextLength: 128000, maxOutputTokens: 4096 };
 }
 
 /**
@@ -248,17 +303,8 @@ export function parseModelInfo(modelId: string): ParsedModelInfo {
 	// Infer capabilities
 	const capabilities = inferModelCapabilities(modelId);
 
-	// Determine context length based on model patterns
-	let contextLength = 128000; // Default 128K
-	let maxOutputTokens = 4096; // Default 4K
-
-	// Larger models often have larger context windows
-	if (modelId.includes("mistral-large") || modelId.includes("deepseek")) {
-		contextLength = 200000;
-		maxOutputTokens = 8192;
-	} else if (modelId.includes("qwen3-vl") || modelId.includes("qwen3-235b")) {
-		contextLength = 180000;
-	}
+	// Infer token limits
+	const { contextLength, maxOutputTokens } = inferTokenLimits(modelId);
 
 	return {
 		id: `mantle:${rawModelId}`,

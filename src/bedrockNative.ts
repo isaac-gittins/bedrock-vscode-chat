@@ -201,14 +201,19 @@ export async function listNativeBedrockModels(options: {
 			const provider = (m.providerName ?? rawModelId.split(".")[0] ?? "unknown").toString();
 			const modelName = (m.modelName ?? rawModelId).toString();
 
+			// Vision support from AWS API (authoritative)
 			const supportsVision = (m.inputModalities ?? []).some((mod) => mod.toString().toUpperCase() === "IMAGE");
 
-			// Tool support is not surfaced reliably by ListFoundationModels.
-			// Default to true so VS Code will surface these models and provide tool definitions.
-			// Runtime probing in the provider will cache the truth per-model.
-			const supportsToolCalling = true;
-
 			const displayName = `${provider} ${modelName}`.replace(/\s+/g, " ").trim();
+
+			// Import capability inference from utils
+			const { inferModelCapabilities, inferTokenLimits } = require("./utils");
+
+			// Infer capabilities from model ID patterns
+			// Tool support is not in ListFoundationModels API, so we use heuristics.
+			// Runtime probing in the provider will cache the actual truth per-model.
+			const inferredCaps = inferModelCapabilities(rawModelId);
+			const { contextLength, maxOutputTokens } = inferTokenLimits(rawModelId);
 
 			return {
 				id: `bedrock:${rawModelId}`,
@@ -217,15 +222,15 @@ export async function listNativeBedrockModels(options: {
 				provider,
 				modelName,
 				displayName,
-				// Bedrock's model summary doesn't currently provide token limits.
-				// Use conservative defaults to keep VS Code happy.
-				contextLength: 32000,
-				maxOutputTokens: 4096,
+				// Token limits from inference (will be overridden by external metadata if available)
+				contextLength,
+				maxOutputTokens,
 				capabilities: {
-					supportsToolCalling,
-					supportsVision,
-					isCodeSpecialized: false,
-					isThinking: false,
+					// Use inferred tool support, but prefer AWS API vision data
+					supportsToolCalling: inferredCaps.supportsToolCalling,
+					supportsVision, // From AWS API
+					isCodeSpecialized: inferredCaps.isCodeSpecialized,
+					isThinking: inferredCaps.isThinking,
 				},
 			};
 		});
