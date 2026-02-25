@@ -7,7 +7,7 @@ NC := \033[0m # No Color
 
 # Default target
 help:
-	@echo "$(BLUE)Bedrock VSCode Chat Extension - Available targets:$(NC)"
+	@echo "$(BLUE)Bedrock GitHub Copilot Chat Extension - Available targets:$(NC)"
 	@echo ""
 	@echo "$(GREEN)Development:$(NC)"
 	@echo "  make install    - Install dependencies"

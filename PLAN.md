@@ -1,11 +1,11 @@
-# AWS Bedrock VSCode Chat Extension - Implementation Plan
+# AWS Bedrock GitHub Copilot Chat Extension - Implementation Plan
 
 **Date**: February 5, 2026  
 **Status**: Released
 
 ## Overview
 
-Build a VSCode extension that integrates AWS Bedrock models via Mantle's OpenAI-compatible Chat Completions API. This extension will enable VSCode users to interact with 26+ Bedrock models directly in the VSCode chat interface.
+Build a VS Code extension that integrates AWS Bedrock models via Mantle's OpenAI-compatible Chat Completions API. This extension enables users to interact with 26+ Bedrock models directly in GitHub Copilot Chat.
 
 ## Architecture
 
@@ -281,7 +281,7 @@ Key patterns adapted:
 ## Testing Strategy
 
 ### Manual Testing Checklist
-- [ ] Install extension in VSCode
+- [ ] Install extension in VS Code
 - [ ] Configure API key
 - [ ] Verify model list loads
 - [ ] Test basic chat with multiple models

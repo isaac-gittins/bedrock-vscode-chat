@@ -22,7 +22,7 @@ Press `F5` in VS Code to open the Extension Development Host
 4. Paste your API key from [AWS Bedrock Console](https://console.aws.amazon.com/bedrock/) if using API key
 
 ### 5. Test the Extension
-1. Open VS Code Chat (`Cmd+Shift+I`)
+1. Open GitHub Copilot Chat (`Cmd+Shift+I`)
 2. Click the model picker dropdown
 3. Select an AWS Bedrock model (e.g., "OpenAI GPT OSS 120B")
 4. Start chatting!

@@ -959,7 +959,7 @@ export class BedrockMantleProvider implements vscode.LanguageModelChatProvider {
 				this._reportedAnyPartInCurrentResponse = true;
 			} else if (delta.reasoning) {
 				// Mantle (e.g. openai.gpt-oss-*) can stream `delta.reasoning` for a while before any `delta.content`.
-				// VS Code chat can look "stuck" unless we report at least one part.
+				// GitHub Copilot Chat can look "stuck" unless we report at least one part.
 				this.logDebug(`delta.reasoning length=${delta.reasoning.length}`);
 				if (!this._reportedAnyPartInCurrentResponse && this.shouldEmitPlaceholders()) {
 					progress.report(new vscode.LanguageModelTextPart("Thinking…"));

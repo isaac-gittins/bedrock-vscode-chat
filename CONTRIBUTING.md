@@ -1,4 +1,4 @@
-# Contributing to AWS Bedrock VSCode Chat Extension
+# Contributing to AWS Bedrock GitHub Copilot Chat Extension
 
 ## Development Setup
 
@@ -21,7 +21,7 @@ npm run compile
 ### Publisher Information
 - **Publisher ID**: `easytocloud` (lowercase - important!)
 - **Extension ID**: `bedrock-mantle-vscode-chat`
-- **Display Name**: "Bedrock LLMs for VS Code Chat"
+- **Display Name**: "Bedrock LLMs for GitHub Copilot Chat"
 
 ### Package Structure
 The extension **MUST** include `node_modules` in the VSIX package because it uses AWS SDK dependencies that are not available in the VS Code runtime.

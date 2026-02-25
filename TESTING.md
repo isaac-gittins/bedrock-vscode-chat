@@ -66,7 +66,7 @@ This is what demonstrates the fix working:
 **Before the fix would cause:**
 - Error around turn 10-43: "Expected toolResult blocks at messages.X.content for the following Ids: tooluse_..."
 - Chat stops responding
-- Error shown in VS Code chat
+- Error shown in GitHub Copilot Chat
 
 **With the fix applied:**
 - Conversation continues smoothly

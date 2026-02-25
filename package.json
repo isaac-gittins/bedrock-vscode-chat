@@ -1,8 +1,8 @@
 {
   "name": "bedrock-mantle-vscode-chat",
-  "displayName": "Bedrock LLMs for VS Code Chat",
-  "description": "Use AWS Bedrock models in VS Code chat (Mantle + native Converse)",
-  "version": "0.3.3",
+  "displayName": "Bedrock LLMs for GitHub Copilot Chat",
+  "description": "Use AWS Bedrock models in GitHub Copilot Chat with streaming, tool calling, and multi-region support",
+  "version": "0.3.4",
   "publisher": "easytocloud",
   "icon": "icon.png",
   "repository": {
@@ -18,11 +18,19 @@
   ],
   "keywords": [
     "ai",
-    "bedrock",
     "aws",
-    "chat",
-    "copilot",
-    "language-model"
+    "bedrock",
+    "github copilot",
+    "copilot chat",
+    "language model",
+    "llm",
+    "claude",
+    "llama",
+    "mistral",
+    "qwen",
+    "converse api",
+    "tool calling",
+    "streaming"
   ],
   "activationEvents": [
     "onStartupFinished"

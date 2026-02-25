@@ -1,5 +1,5 @@
 /**
- * AWS Bedrock VSCode Chat Extension
+ * AWS Bedrock GitHub Copilot Chat Extension
  * Entry point for the extension
  */
 
