@@ -9,7 +9,7 @@ import { BedrockMantleProvider } from "./provider";
 export function activate(context: vscode.ExtensionContext) {
 	const output = vscode.window.createOutputChannel("AWS Bedrock");
 	context.subscriptions.push(output);
-	
+
 	const registerCommandSafe = (commandId: string, handler: (...args: any[]) => any): void => {
 		try {
 			context.subscriptions.push(vscode.commands.registerCommand(commandId, handler));
@@ -20,10 +20,10 @@ export function activate(context: vscode.ExtensionContext) {
 			output.appendLine(`WARNING: ${msg}`);
 		}
 	};
-	
+
 	output.appendLine("AWS Bedrock extension is activating...");
 	output.appendLine(`AWS Bedrock activated at ${new Date().toISOString()}`);
-	
+
 	// Build User-Agent string
 	const extVersion = (context.extension.packageJSON as { version?: string } | undefined)?.version ?? "unknown";
 	const vscodeVersion = vscode.version;
@@ -41,9 +41,9 @@ export function activate(context: vscode.ExtensionContext) {
 		"easytocloud.bedrock-mantle-vscode-chat",
 		provider
 	);
-	
+
 	output.appendLine("Registered aws-bedrock provider with VSCode");
-	
+
 	// Eagerly fetch models to populate the picker
 	provider.provideLanguageModelChatInformation({ silent: true }, new vscode.CancellationTokenSource().token).then(
 		models => {
@@ -89,17 +89,17 @@ export function activate(context: vscode.ExtensionContext) {
 				const currentMethod = config.get<string>("mantleAuthMethod", "apiKey");
 				const selected = await vscode.window.showQuickPick(
 					[
-						{ 
-							label: "API Key", 
+						{
+							label: "API Key",
 							description: "Use API key from AWS Bedrock Console",
 							detail: "Simpler, no AWS CLI setup needed",
-							value: "apiKey" 
+							value: "apiKey"
 						},
-						{ 
-							label: "AWS Credentials", 
+						{
+							label: "AWS Credentials",
 							description: "Use AWS profile/credentials",
 							detail: "Better for existing AWS setups",
-							value: "awsCredentials" 
+							value: "awsCredentials"
 						},
 					],
 					{
@@ -192,6 +192,7 @@ export function activate(context: vscode.ExtensionContext) {
 					{ label: "Europe (Milan)", value: "eu-south-1" },
 					{ label: "Asia Pacific (Mumbai)", value: "ap-south-1" },
 					{ label: "Asia Pacific (Tokyo)", value: "ap-northeast-1" },
+					{ label: "Asia Pacific (Sydney)", value: "ap-southeast-2" },
 					{ label: "Asia Pacific (Jakarta)", value: "ap-southeast-3" },
 					{ label: "South America (São Paulo)", value: "sa-east-1" },
 				];
