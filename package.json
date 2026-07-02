@@ -1,13 +1,13 @@
 {
   "name": "bedrock-mantle-vscode-chat",
-  "displayName": "Bedrock LLMs for GitHub Copilot Chat",
+  "displayName": "Bedrock LLMs for GitHub Copilot Chat - Izax Fork",
   "description": "Use AWS Bedrock models in GitHub Copilot Chat with streaming, tool calling, and multi-region support",
   "version": "0.3.4",
-  "publisher": "easytocloud",
+  "publisher": "isaac-gittins",
   "icon": "icon.png",
   "repository": {
     "type": "git",
-    "url": "https://github.com/easytocloud/bedrock-vscode-chat"
+    "url": "https://github.com/isaac-gittins/bedrock-vscode-chat"
   },
   "engines": {
     "vscode": "^1.104.0"
