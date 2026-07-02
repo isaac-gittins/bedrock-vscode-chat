@@ -1,6 +1,6 @@
 # AWS Bedrock GitHub Copilot Chat Extension - Implementation Plan
 
-**Date**: February 5, 2026  
+**Date**: February 5, 2026
 **Status**: Released
 
 ## Overview
@@ -50,6 +50,7 @@ Build a VS Code extension that integrates AWS Bedrock models via Mantle's OpenAI
 - eu-south-1 (Milan)
 - ap-south-1 (Mumbai)
 - ap-northeast-1 (Tokyo)
+- ap-northeast-2 (Sydney)
 - ap-southeast-3 (Jakarta)
 - sa-east-1 (São Paulo)
 
@@ -165,31 +166,31 @@ Examples:
 ## Technical Decisions
 
 ### 1. Authentication
-**Decision**: Support Mantle API key and AWS credential authentication  
+**Decision**: Support Mantle API key and AWS credential authentication
 **Rationale**: API key is simplest for Mantle; AWS credentials allow native Bedrock and Mantle SigV4
 
 ### 2. API Choice
-**Decision**: Use Chat Completions API (not Responses API)  
+**Decision**: Use Chat Completions API (not Responses API)
 **Rationale**: Standard OpenAI compatibility, proven pattern from HuggingFace extension
 
 ### 3. Model Discovery
-**Decision**: Dynamic fetching from Models API  
+**Decision**: Dynamic fetching from Models API
 **Rationale**: Always up-to-date with new models, no hardcoded list maintenance
 
 ### 4. Capability Detection
-**Decision**: Pattern-matching model IDs with conservative defaults  
+**Decision**: Pattern-matching model IDs with conservative defaults
 **Rationale**: Models API doesn't provide capability metadata, pattern-matching is pragmatic
 
 ### 5. Tool Call Handling
-**Decision**: Buffer-based incremental parsing  
+**Decision**: Buffer-based incremental parsing
 **Rationale**: Streaming tool calls arrive as JSON deltas, must accumulate before emitting
 
 ### 6. Logging Strategy
-**Decision**: Use Output Channel instead of console.log  
+**Decision**: Use Output Channel instead of console.log
 **Rationale**: console.log only works in Extension Development Host, not in installed extensions. Output Channel is visible to all users.
 
 ### 7. Dependency Packaging
-**Decision**: Include node_modules in VSIX package  
+**Decision**: Include node_modules in VSIX package
 **Rationale**: AWS SDK dependencies are not available in VS Code runtime, must be bundled with extension.
 
 ## Critical Implementation Notes
